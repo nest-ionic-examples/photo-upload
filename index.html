@@ -449,7 +449,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_create_project">Create Project</a></li>
 <li><a href="#_add_photos_controller">Add Photos Controller</a></li>
 <li><a href="#_running_the_app">Running the app</a></li>
-<li><a href="#_ionic_client">Ionic Client</a></li>
+</ul>
+</li>
+<li><a href="#_ionic_client">Ionic Client</a>
+<ul class="sectlevel2">
+<li><a href="#_create_the_app">Create the app</a></li>
+<li><a href="#_add_api_url_to_environment_file">Add API url to Environment file</a></li>
+<li><a href="#_add_ionicpwa_elements_dependency">Add <code>@ionic/pwa-elements</code> Dependency</a></li>
+<li><a href="#_modify_home_page">Modify Home page</a></li>
+<li><a href="#_running_the_app_2">Running the App</a></li>
 </ul>
 </li>
 </ul>
@@ -494,7 +502,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>then change the directory of your console doing next command:</p>
+<p>then change the directory of your console running next command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -562,10 +570,208 @@ export class PhotosController {
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_ionic_client">Ionic Client</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ionic_client">Ionic Client</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>In this guide, we&#8217;ll add Camera functionality to an Ionic Angular app that works on the web, iOS, and Android. Ready to capture photos using just one JavaScript method call? Let&#8217;s get started.</p>
+<p>In this section, we will create an Ionic Angular app that works on the web, iOS, and Android with Camera functionality. Once the photo has been captured the app will upload the image to the server API.</p>
+</div>
+<div class="sect2">
+<h3 id="_create_the_app">Create the app</h3>
+<div class="paragraph">
+<p>To create the app run next command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">ionic start photo-upload-client --capacitor</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then go inside it running next command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">cd photo-upload-client</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_add_api_url_to_environment_file">Add API url to Environment file</h3>
+<div class="paragraph">
+<p>Since our server is running locally in port 3000 it will be needed to add the API url in the <code>environment.ts</code> file, so modify it with next code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="ts" class="language-ts hljs">// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+
+export const environment = {
+  production: false,
+  api: 'http://localhost:3000/' <i class="conum" data-value="1"></i><b>(1)</b>
+};
+
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>url that points to the API server</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_add_ionicpwa_elements_dependency">Add <code>@ionic/pwa-elements</code> Dependency</h3>
+<div class="paragraph">
+<p>In order to use Camera with capacitor it will be needed to add <code>@ionic/pwa-elements</code> running next command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">npm i @ionic/pwa-elements</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then you will need to initialize the library in the <code>main.ts</code> file. To do that modify <code>main.ts</code> with next code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="ts" class="language-ts hljs">import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+import { defineCustomElements } from '@ionic/pwa-elements/loader'; <i class="conum" data-value="1"></i><b>(1)</b>
+
+defineCustomElements(window); <i class="conum" data-value="2"></i><b>(2)</b>
+
+if (environment.production) {
+  enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err =&gt; console.log(err));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>import <code>defineCustomElements</code> from <code>@ionic/pwa-elements/loader</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Call the element loader after the platform has been bootstrapped</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modify_home_page">Modify Home page</h3>
+<div class="paragraph">
+<p>Next step will be to modify <code>home.page.ts</code> with next code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="ts" class="language-ts hljs">import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { CameraResultType, CameraSource, Plugins } from '@capacitor/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+})
+export class HomePage {
+
+  constructor(private http: HttpClient) {}
+
+  async upload() {
+    const capturedImage = await Plugins.Camera.getPhoto({ <i class="conum" data-value="1"></i><b>(1)</b>
+      source: CameraSource.Camera,
+      resultType: CameraResultType.DataUrl,
+      saveToGallery: false
+    });
+
+    const file = await (await fetch(capturedImage.dataUrl)).blob(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+    const formData = new FormData(); <i class="conum" data-value="3"></i><b>(3)</b>
+    formData.append('file', file);
+
+    this.http.post(environment.api + 'photos/upload', formData).subscribe(resp =&gt; { <i class="conum" data-value="4"></i><b>(4)</b>
+      console.log('resp: ', resp);
+    }, err =&gt; {
+      console.log('err: ', err);
+    });
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Gets photo using the capacitor camera plugin</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>converts <code>capturedImage</code> into <code>blob</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>appends the blob <code>file</code> into a new <code>formData</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>sends the <code>formData</code> to the <code>photos/upload</code> api with a <code>POST</code> request.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>then modify <code>home.page.html</code> with next code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="html" class="language-html hljs">&lt;ion-header&gt;
+  &lt;ion-toolbar&gt;
+    &lt;ion-title&gt;
+      Photo Upload
+    &lt;/ion-title&gt;
+  &lt;/ion-toolbar&gt;
+&lt;/ion-header&gt;
+
+&lt;ion-content&gt;
+  &lt;ion-fab-button (click)="upload()"&gt;
+    &lt;ion-icon name="camera"&gt;&lt;/ion-icon&gt;
+  &lt;/ion-fab-button&gt;
+&lt;/ion-content&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running_the_app_2">Running the App</h3>
+<div class="paragraph">
+<p>To run the app you will need to execute next command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">ng serve</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>this will initialize your app in <a href="http://localhost:4200">localhost:4200</a></p>
 </div>
 </div>
 </div>

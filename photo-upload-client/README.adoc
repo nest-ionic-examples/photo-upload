@@ -1,4 +1,70 @@
-== Ionic Client
+= Ionic Client
 
-In this guide, we'll add Camera functionality to an Ionic Angular app that works on the web, iOS, and Android. Ready to capture photos using just one JavaScript method call? Let's get started.
+In this section, we will create an Ionic Angular app that works on the web, iOS, and Android with Camera functionality. Once the photo has been captured the app will upload the image to the server API.
 
+== Create the app
+
+To create the app run next command:
+
+```bash
+ionic start photo-upload-client --capacitor
+```
+
+then go inside it running next command:
+
+```bash
+cd photo-upload-client
+```
+
+== Add API url to Environment file
+
+Since our server is running locally in port 3000 it will be needed to add the API url in the `environment.ts` file, so modify it with next code:
+
+```ts
+include::src/environments/environment.ts[]
+```
+<1> url that points to the API server
+
+== Add `@ionic/pwa-elements` Dependency
+
+In order to use Camera with capacitor it will be needed to add `@ionic/pwa-elements` running next command:
+
+```bash
+npm i @ionic/pwa-elements
+```
+
+then you will need to initialize the library in the `main.ts` file. To do that modify `main.ts` with next code:
+
+```ts
+include::src/main.ts[]
+```
+<1> import `defineCustomElements` from `@ionic/pwa-elements/loader`.
+<2> Call the element loader after the platform has been bootstrapped
+
+== Modify Home page
+
+Next step will be to modify `home.page.ts` with next code:
+
+```ts
+include::src/app/home/home.page.ts[]
+```
+<1> Gets photo using the capacitor camera plugin
+<2> converts `capturedImage` into `blob`
+<3> appends the blob `file` into a new `formData`
+<4> sends the `formData` to the `photos/upload` api with a `POST` request.
+
+then modify `home.page.html` with next code:
+
+```html
+include::src/app/home/home.page.html[]
+```
+
+== Running the App
+
+To run the app you will need to execute next command:
+
+```bash
+ng serve
+```
+
+this will initialize your app in http://localhost:4200[localhost:4200]
