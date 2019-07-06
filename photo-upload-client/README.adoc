@@ -1,0 +1,4 @@
+== Ionic Client
+
+In this guide, we'll add Camera functionality to an Ionic Angular app that works on the web, iOS, and Android. Ready to capture photos using just one JavaScript method call? Let's get started.
+

@@ -1,0 +1,51 @@
+= Nest API
+
+In this section we are going to learn how to create a server-api that uses NestJs framework. You could find the full documentation of NestJs file uploading https://docs.nestjs.com/techniques/file-upload[here].
+
+== Create Project
+
+The first step will be to create a new project running next command:
+
+```bash
+nest new photo-upload-api
+```
+
+then change the directory of your console running next command:
+
+```bash
+cd photo-upload-api
+```
+
+== Add Photos Controller
+
+Now we need to create a new controller to handle the uploaded photos. To do that we need to run next command:
+
+```bash
+nest g co controllers/photos
+```
+
+After that modify `photos.controller.ts` file with next code:
+
+```ts
+include::src/controllers/photos/photos.controller.ts[] 
+```
+
+== Running the app
+
+Once you have done all that its time to start the server API by running next commands:
+
+=== development
+
+```bash
+npm run start
+```
+
+=== watch mode
+```bash
+npm run start:dev
+```
+
+=== production mode
+```bash
+npm run start:prod
+```
