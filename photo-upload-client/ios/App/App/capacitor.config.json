@@ -1,0 +1,7 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "photo-upload-client",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

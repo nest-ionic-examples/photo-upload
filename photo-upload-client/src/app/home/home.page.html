@@ -1,15 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      Photo Upload
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a href="https://ionicframework.com/docs/" rel="noopener" target="_blank">docs</a> will be
-      your guide.</p>
-  </div>
+  <!--<input type="file" accept="image/*" capture="camera" (change)="upload($event)" id="fileInput" hidden/>
+  <label for="fileInput">
+    <ion-fab-button>
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </label>-->
+  <ion-fab-button (click)="upload()">
+    <ion-icon name="person"></ion-icon>
+  </ion-fab-button>
 </ion-content>
